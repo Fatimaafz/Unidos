@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vmEditInfo"
+            type="com.example.unidos.accountManagement.EditUserInfoViewModel" />
+    </data>
+
+    <ScrollView
+        style="@style/AppTheme.background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="-49dp">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/myLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.50" />
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView2"
+                style="@style/TitleFormat"
+                android:text="Datos personales"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilName"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/etName"
+                    style="@style/editText"
+                    android:hint="@string/name"
+                    android:text="@={vmEditInfo.name}"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilName2"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/secondName"
+                    android:text="@={vmEditInfo.name2}"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilLastName"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:hint="@string/lastName"
+                    android:text="@={vmEditInfo.lastName}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilLastName2"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline"
+                app:layout_constraintTop_toTopOf="@+id/guideline2">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    style="@style/editText"
+                    android:hint="@string/lastName2"
+                    android:text="@={vmEditInfo.lastName2}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilBirthDate"
+                style="@style/firstInputLayout"
+                android:hint="Fecha de nacimiento"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline3">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TietDate"
+                    style="@style/editText"
+                    android:clickable="true"
+                    android:cursorVisible="false"
+                    android:drawableEnd="@drawable/ic_calendar_today_24px"
+                    android:drawableRight="@drawable/ic_calendar_today_24px"
+                    android:focusable="false"
+                    android:fontFamily="@font/ralewayregular"
+                    android:hint="Fecha de nacimiento"
+                    android:inputType="date"
+                    android:textColor="@android:color/black"
+                    android:text="@={vmEditInfo.birthDate}"
+                    android:onClick="@{() -> vmEditInfo.setIsFieldDateSelected()}"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilGender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="25dp"
+                android:fontFamily="@font/ralewayregular"
+                android:textColorHint="@android:color/black"
+                app:boxStrokeColor="@android:color/black"
+                app:boxStrokeWidth="3dp"
+                app:errorIconTint="@color/error_color"
+                app:errorTextColor="@color/error_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilBirthDate">
+
+                <AutoCompleteTextView
+                    android:id="@+id/sexMenu"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:fontFamily="@font/ralewayregular"
+                    android:hint="Sexo"
+                    android:inputType="none"
+                    android:cursorVisible="false"
+                    android:textColor="@android:color/black"
+                    android:onClick="@{() -> vmEditInfo.setIsFieldSexSelected()}"
+                    android:text="@{vmEditInfo.sex}"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilPhone"
+                style="@style/firstInputLayout"
+                android:layout_marginTop="25dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textCursorDrawable="@null"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilGender">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TietPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginBottom="20dp"
+                    android:fontFamily="@font/ralewayregular"
+                    android:hint="Número telefónico"
+                    android:inputType="numberPassword"
+                    android:textColor="@android:color/black"
+                    android:textColorHint="#000"
+                    android:text="@={vmEditInfo.phone}"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                style="@style/TitleFormat"
+                android:text="Datos de acceso"
+                app:layout_constraintEnd_toStartOf="@+id/guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilPhone" />
+
+            <TextView
+                android:id="@+id/tvCURP"
+                style="@style/subtitleFormat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/curp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
+
+            <TextView
+                android:id="@+id/maUserCURP"
+                style="@style/normalText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@={vmEditInfo.curp}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvCURP" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_ok"
+                style="@style/FillButton"
+                android:enabled="@{vmEditInfo.buttonEnabled}"
+                android:onClick="@{() -> vmEditInfo.saveChanges()}"
+                android:fontFamily="@font/ralewaybold"
+                android:text="Guardar"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/maUserCURP" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="162dp" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="263dp" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>
+

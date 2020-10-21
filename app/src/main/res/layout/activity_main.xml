@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".Login">
+
+    <data> <!-- we'll bind design components properties to data sources (ViewModel) -->
+        <!-- A variable to define binding expressions -->
+        <variable
+            name="viewmodel"
+            type="com.example.unidos.LoginViewModel"/> <!-- This layout'll be bound to the LoginViewModel class -->
+    </data>
+
+    <LinearLayout
+        style="@style/AppTheme.background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/TilCurp"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:textColorHint="@color/design_default_color_on_secondary"
+            android:fontFamily="@font/ralewaybold"
+            android:textCursorDrawable="@null"
+            app:boxStrokeColor="@android:color/black"
+            app:boxStrokeWidth="3dp"
+            app:errorEnabled="true"
+            app:errorTextColor="@color/error_color"
+            app:errorIconTint="@color/error_color">
+            <!-- On click the component'll response to validData() method behavior -->
+            <!-- The propertie "text" will be able to listen and receive commands from the architecture
+             component LiveData which in this case is the variable logCURP while it listen user changes -->
+
+            <!-- the other components will have a similar behavior -->
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/TietCurp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ralewayregular"
+                android:hint="CURP"
+                android:inputType="textCapCharacters"
+                android:onClick="@{() -> viewmodel.validData()}"
+                android:text="@={viewmodel.logCURP}"
+                android:textColor="@android:color/black"
+                android:textColorHint="#000" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_login"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="0dp"
+            android:fontFamily="@font/ralewaybold"
+            android:text="@string/txtBtnLogIn"
+            android:textAllCaps="false"
+            android:textColor="@android:color/white"
+            android:enabled="@{viewmodel.btLogEnable}"
+            android:onClick="@{() -> viewmodel.log()}"
+            app:backgroundTint="@color/red3"
+            app:cornerRadius="30dp" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCreateAccount"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_gravity="center"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="20dp"
+            android:fontFamily="@font/ralewaybold"
+            android:text="@string/txtBtnCreateAccount"
+            android:textAllCaps="false"
+            android:textColor="@android:color/black"
+            android:onClick="@{() -> viewmodel.goToNewAcc()}"
+            app:cornerRadius="30dp"
+            app:strokeColor="@color/red3"
+            app:strokeWidth="2dp" />
+        <ProgressBar
+            android:id="@+id/progress_circular"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center"
+            android:visibility="gone"
+            />
+
+    </LinearLayout>
+</layout>

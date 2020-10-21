@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#A60A0A</color>
+    <color name="colorAccent">#A60A0A</color>
+    <color name="red3">#A60A0A</color>
+    <color name="error_color">#FFCF38</color>
+    <color name="white">#FFFFFF</color>
+
+</resources>

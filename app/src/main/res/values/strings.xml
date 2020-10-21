@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Unidos</string>
+    <string name="txtBtnLogIn">Iniciar Sesión</string>
+    <string name="txtBtnCreateAccount">Crear cuenta</string>
+    <string name="name">Nombre</string>
+    <string name="secondName">Segundo nombre</string>
+    <string name="lastName">Primer apellido</string>
+    <string name="lastName2">Segundo apellido</string>
+    <string name="curp">CURP</string>
+    <string name="address">Dirección</string>
+    <string name="genre">Género</string>
+    <string name="birthdate">Fecha de nacimiento</string>
+    <string name="phone">Número telefónico</string>
+    <string name="user_curp"></string>
+    <string name="logged">true</string>
+</resources>
