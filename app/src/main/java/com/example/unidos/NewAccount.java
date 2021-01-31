@@ -1,11 +1,15 @@
 package com.example.unidos;
 //changeq
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.util.Log;
@@ -19,15 +23,29 @@ import android.widget.Toast;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
+import com.example.unidos.access.Menu;
 import com.example.unidos.databinding.ActivityNewAccountBinding;
+import com.example.unidos.report.ReportContainer;
+import com.example.unidos.repository.ReportedPerson;
+import com.example.unidos.searching.Search;
+import com.example.unidos.shared.Dialog;
+import com.example.unidos.shared.GeneralCalendar;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
 
 
 public class NewAccount extends AppCompatActivity {
     String selectedDate, selectedSex;
     private Messages msg = new Messages();
     private  static final String[] options = new String[]{"Hombre", "Mujer"};
+    private NewAccountViewModel naViewModel;
     AutoCompleteTextView sex;
     ProgressBar progressBar;
     TextInputLayout curp;
@@ -40,7 +58,7 @@ public class NewAccount extends AppCompatActivity {
         final ActivityNewAccountBinding naBinding = DataBindingUtil.setContentView(this, R.layout.activity_new_account);
         /** An instance of the class LoginViewModel
          * which will be bound to the activity_new_account layout **/
-        final NewAccountViewModel naViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(NewAccountViewModel.class);
+        naViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(NewAccountViewModel.class);
         final PersistentData persistentData =  new PersistentData(this);
 
         persistentData.checkExistence();
@@ -51,7 +69,9 @@ public class NewAccount extends AppCompatActivity {
         naBinding.setLifecycleOwner(this);
         /** set list values to true or false to keep the
          * button create account disabled on app start **/
+        progressBar = findViewById(R.id.progress_circular);
         naViewModel.fill();
+        final GeneralCalendar calendar = new GeneralCalendar(this);
         /** Identify the AutoCompleteTextView. */
         sex = findViewById(R.id.outlined_exposed_dropdown);
 
@@ -63,11 +83,18 @@ public class NewAccount extends AppCompatActivity {
             @Override
             public void onChanged(Boolean s) {
                 if(s){
-                    System.out.println("DEBO MOSTRAR EL DATEPICKER");
-                    /** To configure the calendar befor displaying it. **/
+                    calendar.getDate().addObserver(new java.util.Observer() {
+                        @Override
+                        public void update(Observable o, Object arg) {
+                            naViewModel.date.setValue(String.valueOf(((ElementoObservable) o).getElemento()));
+
+                        }
+                    });
+                    calendar.setCalendar(18,100).show();
+
+                    /*System.out.println("DEBO MOSTRAR EL DATEPICKER");
                     DatePickerDialog datePickerDialog = setCalendar(NewAccount.this, naViewModel);
-                    /** show the calendar */
-                    datePickerDialog.show();
+                    datePickerDialog.show();*/
                 }
             }
         });
@@ -313,7 +340,6 @@ public class NewAccount extends AppCompatActivity {
         naViewModel.actionBtNewAcc.observe(this, new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                progressBar = findViewById(R.id.progress_circular);
                 Log.i("---> pb", s);
                 switch (s){
                     /** Just show the progress bar **/
@@ -341,6 +367,8 @@ public class NewAccount extends AppCompatActivity {
                         newAccountDoSomething(msg.findMessage("opSuccess"));
                         /** call method to store the CURP and keep log */
                         persistentData.setValues(naViewModel.getCURP());
+                        determineActivityToStart();
+                        //goToMainActivity();
                         break;
                         /** The phone is already registered **/
                     case "hideProgressBar:existingPhone":
@@ -357,6 +385,119 @@ public class NewAccount extends AppCompatActivity {
                 }
             }
         });
+
+
+        naViewModel.isBtnPressed.observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isPressed) {
+                if(isPressed){
+                    DialogFragment dialog = new Dialog(true);
+                    dialog.show(getSupportFragmentManager(), "dialog");
+                }
+            }
+        });
+    }
+
+    private void checkDistance(Bundle bundle, LatLng userLoc){
+        naViewModel.opResult.observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer res) {
+                switch (res){
+                    case 1:
+                        goToPersonInfo(naViewModel.getPerson());
+                        break;
+                    case -1:
+                        showMessage(Messages.MSG003_1_OP_FAIL);
+                        break;
+                    case -2:
+                        showMessage(Messages.MSG003_1_OP_FAIL);
+                        break;
+                    case -3:
+                        goToListPeople();
+                }
+            }
+        });
+
+        naViewModel.getIfPersonNear((String) bundle.get("CURP"),
+                new LatLng(Double.parseDouble(bundle.getString("lat")),
+                        Double.parseDouble(bundle.getString("lon"))),
+                userLoc
+        );
+    }
+
+    private void getUserLocation(final Bundle bundle){
+        FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(this);
+        Log.i("^^^{ ", "LETS GET USER LOC");
+        try {
+            locationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            Log.i("^^^{ ", "SUCCESS");
+                            // GPS location can be null if GPS is switched off
+                            if (location != null) {
+                                Log.i("^^^{  ", "We got the location");
+                                checkDistance(bundle, new LatLng(
+                                        location.getLatitude(),
+                                        location.getLongitude()
+                                ));
+                            }else if(location == null){
+                                //showMessage(Messages.MSG007_2_LOCATION_FAIL);
+                                Log.i("^^^{ ", "Loc is null");
+                                goToListPeople();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("^^^{ ", "Error trying to get last GPS location");
+                            e.printStackTrace();
+                            goToListPeople();
+                        }
+                    });
+        } catch (SecurityException e) { e.printStackTrace(); }
+    }
+
+    private void determineActivityToStart() {
+        if (getIntent().getExtras() != null) {
+            Bundle bundle = getIntent().getExtras();
+
+            Log.i("^^^{ ", "EXTRAS NOT NULL");
+            if (bundle.containsKey("click_action") || bundle.containsKey("log")) {
+                Log.i("^^^{ in determact", "Notif has intent name");
+                getUserLocation(bundle);
+            }
+        } else {
+            Log.i("^^^{ ", "EXTRAS R NULL");
+            goToMainActivity();
+        }
+    }
+
+    private void goToMainActivity(){
+        Intent i = new Intent(this, Menu.class);
+        startActivity(i);
+    }
+
+    private void goToPersonInfo(ReportedPerson person){
+        /*ReportedPerson person = new ReportedPerson();
+        person.setName("Juana");
+        person.setName2("La Cubana");
+        person.setFound(false);
+        person.setMissingPlace(15);
+        person.setRecSeenDate(Calendar.getInstance().getTime());*/
+
+        Intent i = new Intent(this, ReportContainer.class);
+        i.putExtra("SelPerson", new Gson().toJson(person));
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(i);
+    }
+
+    private void goToListPeople(){
+        Intent i = new Intent(this, Search.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
     }
 
     /** Show informative toast messages. **/
@@ -416,6 +557,34 @@ public class NewAccount extends AppCompatActivity {
                 navm.sex.setValue(selectedSex);
             }
         });
+    }
+
+    public void method(){
+        Log.i("%%%%%", "Im back");
+        progressBar.setVisibility(View.VISIBLE);
+        Connection connection = new Connection(this);
+
+        /** If the phone hasn´t connection**/
+        if(connection.isNotConnected())
+        /** Inform the observer it must show an error message
+         and hide the progress bar. */
+            newAccountDoSomething(msg.findMessage("noConn"));
+        else if(connection.checkConnection()){
+            /** Is the connection stable?**/
+            System.out.println("Sí cuenta con la calidad deseada");
+            /** Continue with the register. **/
+            naViewModel.register();
+        } else{
+            /**Probably the connection is unstable. **/
+            /**Inform the observer it must show the progress bar
+             * and display an error message. */
+            newAccountDoSomething(msg.findMessage("badConn"));
+        }
+    }
+
+    public void showMessage(String message){
+        progressBar.setVisibility(View.GONE);
+        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
     }
 
 }

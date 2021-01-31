@@ -50,6 +50,22 @@ public class Connection{
         System.out.println(connectivityManager.getActiveNetwork());
         return connectivityManager.getNetworkCapabilities(getNetwork()).hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED);
     }
+
+    public boolean isConnected(){
+        if (isNotConnected()) {
+            /** The observer will display a message **/
+            return false;
+        } else if (checkConnection()) {
+            /** In case the mobile has an stable
+             * Internet connection. */
+            return true;
+        } else { /** Probably the connection is unstable. **/
+            /** The observer will detect the change in the value and
+             * then it will show an error message. */
+            return false;
+        }
+    }
+
 }
 
 /*

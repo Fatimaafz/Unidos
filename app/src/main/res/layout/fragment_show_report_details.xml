@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="vmRepDet"
+            type="com.example.unidos.report.ReportDetailsDialogViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        app:cardBackgroundColor="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        android:layout_gravity="center"
+        >
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/AppTheme.background"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:id="@+id/textView28"
+                style="@style/subtitleFormat2"
+                android:fontFamily="@font/ralewaybold"
+                android:text="Datos generales"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/textView21"
+                style="@style/subtitleFormat2"
+                android:text="@string/repType"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView28" />
+
+            <TextView
+                android:id="@+id/repType"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.repType}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView21" />
+
+            <TextView
+                android:id="@+id/textView32"
+                style="@style/subtitleFormat2"
+                android:text="@string/elabDate"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/repType" />
+
+            <TextView
+                android:id="@+id/elabDate"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.elabDate}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView32" />
+
+            <TextView
+                android:id="@+id/tvDesc"
+                style="@style/subtitleFormat2"
+                android:fontFamily="@font/ralewaybold"
+                android:text="@string/desc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline13" />
+
+            <TextView
+                android:id="@+id/textView34"
+                style="@style/subtitleFormat2"
+                android:text="@string/date"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
+
+            <TextView
+                android:id="@+id/date"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.lastDate}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView34" />
+
+            <TextView
+                android:id="@+id/textView36"
+                style="@style/subtitleFormat2"
+                android:text="@string/place"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toBottomOf="@+id/tvDesc" />
+
+            <TextView
+                android:id="@+id/place"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.place}"
+                app:layout_constraintStart_toStartOf="@+id/guideline12"
+                app:layout_constraintTop_toBottomOf="@+id/textView36" />
+
+            <TextView
+                android:id="@+id/textView38"
+                style="@style/subtitleFormat2"
+                android:text="@string/clothes"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/date" />
+
+            <TextView
+                android:id="@+id/clothes"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.clothe}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView38" />
+
+            <TextView
+                android:id="@+id/textView39"
+                style="@style/subtitleFormat2"
+                android:text="@string/details"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/clothes" />
+
+            <TextView
+                android:id="@+id/details"
+                style="@style/textFormat2"
+                android:text="@={vmRepDet.details}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView39" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline12"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline13"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.45" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

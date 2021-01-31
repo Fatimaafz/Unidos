@@ -3,6 +3,7 @@ package com.example.unidos;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskExecutors;
@@ -17,6 +18,7 @@ public class VerifyPhoneActivity {
     private String verificationId;
     private FirebaseAuth mAuth;
     int verificationStatus=0;
+    private ElementoObservable<Integer> opResult;
     private ElementoObservable<Integer> verificationStatusObservable;   // Se agrega el observable
     private ElementoObservable<Boolean> retrievalTimeObservable; //DELETE
     private ElementoObservable<Boolean> phoneVerifTimeOutObservable;
@@ -24,6 +26,8 @@ public class VerifyPhoneActivity {
 
     public VerifyPhoneActivity(){
         mAuth = FirebaseAuth.getInstance();
+        opResult = new ElementoObservable<>();
+
         verificationStatusObservable = new ElementoObservable<>();
         verificationStatusObservable.adherirElemento(verificationStatus);
         retrievalTimeObservable = new ElementoObservable<>(); // DELETE
@@ -32,9 +36,14 @@ public class VerifyPhoneActivity {
         //sendVerificationCode(phoneNumber);
     }
 
+    public ElementoObservable<Integer> getOpResult() {
+        return opResult;
+    }
+
     public void sendVerificationMethod(String phoneNumber){
         System.out.println("TELÉFONO EN VERIFY: "+ phoneNumber);
-        sendVerificationCode("+52"+phoneNumber); }
+        sendVerificationCode("+52"+phoneNumber);
+    }
 
 
     /**
@@ -76,7 +85,7 @@ public class VerifyPhoneActivity {
         });
     }
 
-    private void sendVerificationCode(String number){
+    private void sendVerificationCode(String number) {
         PhoneAuthProvider.getInstance().verifyPhoneNumber(
                 number,
                 60,
@@ -84,6 +93,16 @@ public class VerifyPhoneActivity {
                 TaskExecutors.MAIN_THREAD,
                 mCallback
         );
+
+        /*PhoneAuthOptions options =
+                PhoneAuthOptions.newBuilder(mAuth)
+                .setPhoneNumber(number)
+                .setTimeout(60L, TimeUnit.SECONDS)
+                .setActivity(this)
+                .setCallbacks(mCallback)
+                .build();
+        PhoneAuthProvider.verifyPhoneNumber(options);*/
+
     }
 
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallback = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
@@ -95,6 +114,8 @@ public class VerifyPhoneActivity {
 
         @Override
         public void onCodeAutoRetrievalTimeOut(String s){
+            opResult.setElemento(-2);
+
             retrievalTime = true; //DELETE
             retrievalTimeObservable.setElemento(true); //DELETE
             phoneVerifTimeOutObservable.setElemento(true);
@@ -105,6 +126,8 @@ public class VerifyPhoneActivity {
             String code = phoneAuthCredential.getSmsCode();
             if(code != null){
                 System.out.println("AQUI ESTOY");
+                opResult.setElemento(1);
+
                 verificationStatusObservable.setElemento(1);     // Se setea el valor de la propiedad
                 verificationStatus=1;
                 verifyCode(code);
@@ -114,6 +137,8 @@ public class VerifyPhoneActivity {
         @Override
         public void onVerificationFailed(@NonNull FirebaseException e) {
             System.out.println("falló la verificación");
+            opResult.setElemento(-1);
+
             verificationStatusObservable.setElemento(2);    // Se setea el valor de la propiedad
             verificationStatus=2;
             Log.i("@@@@ Exception", e.toString());

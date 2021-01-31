@@ -1,14 +1,19 @@
-package com.example.unidos;
-//changeq
+package com.example.unidos.repository;
+
+import android.util.Log;
 
 public class User {
     /** User attributes **/
     private String CURP;
-    private String firstName;
-    private String secondName;
-    private String surname1;
+    private String name;
+    private String name2;
+    private String surname;
+    private String firstName; //DELETE
+    private String secondName; //DELETE
+    private String surname1; //DELETE
     private String surname2;
-    private String dateBirth;
+    private String birthDate;
+    private String dateBirth; //DELETE
     private String sex;
     private String phoneNumber;
     private String telephNumber;
@@ -17,7 +22,7 @@ public class User {
     public User(){}
 
     /** Constructor **/
-    User(String curp, String firstName, String secondName, String surname1, String surname2, String dateBirth, String sex, String telephNumber){
+    public User(String curp, String firstName, String secondName, String surname1, String surname2, String dateBirth, String sex, String telephNumber){
         this.CURP=curp;
         this.firstName=firstName;
         this.secondName=secondName;
@@ -109,30 +114,65 @@ public class User {
         this.phoneNumber = phoneNumber;
     }
 
+    public String getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(String birthDate) {
+        this.birthDate = birthDate;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName2() {
+        return name2;
+    }
+
+    public void setName2(String name2) {
+        this.name2 = name2;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
     public String getFullName(){
         String fullName = "";
-        fullName += firstName;
+        if(name == null && name2 == null
+                && surname == null && surname2 == null)
+            return "-";
+        else
+            if(name.isEmpty() && name2.isEmpty()
+                    && surname.isEmpty() && surname2.isEmpty())
+                return "-";
+            else {
+                fullName += name;
 
-        if (secondName != null)
-            fullName += "  " + secondName;
+                if (name2 != null)
+                    fullName += "  " + name2;
 
-        fullName += "  " + surname1;
+                fullName += "\n" + surname;
 
-        if(surname2 != null)
-            fullName += "  "+ surname2;
+                if (surname2 != null)
+                    fullName += "  " + surname2;
 
-        return fullName;
+                return fullName;
+            }
     }
 
     public String getInitialUserInfo(){
-        String initInfo = firstName + surname1 + dateBirth + sex + phoneNumber;
-
-        if (secondName != null)
-            initInfo += secondName;
-
-        if(surname2 != null)
-            initInfo += surname2;
-
+        String initInfo = name + surname + birthDate + sex + phoneNumber+ name2 + surname2;
+        Log.i("######", "get initial user info1");
         return initInfo;
     }
 }

@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vmNewReport"
+            type="com.example.unidos.report.NewReportViewModel" />
+    </data>
+
+    <ScrollView
+        style="@style/AppTheme.background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/gray"
+                android:paddingBottom="15dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView29"
+                    style="@style/title2"
+                    android:text="@string/authData"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView31"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/curp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView29" />
+
+                <TextView
+                    android:id="@+id/tvCurp"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.userCURP}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView31" />
+
+                <TextView
+                    android:id="@+id/textView35"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvCurp" />
+
+                <TextView
+                    android:id="@+id/tvName"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.userName}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView35" />
+
+                <TextView
+                    android:id="@+id/textView41"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/phone"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+                <TextView
+                    android:id="@+id/tvPhone"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.userPhone}"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView41" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+                <TextView
+                    android:id="@+id/textView42"
+                    style="@style/title2"
+                    android:text="@string/rPersonData"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/textView43"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/curp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView42" />
+
+                <TextView
+                    android:id="@+id/tvPersonCurp"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.personCURP}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView43" />
+
+                <TextView
+                    android:id="@+id/textView44"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/name"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPersonCurp" />
+
+                <TextView
+                    android:id="@+id/tvPersonName"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.personName}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView44" />
+
+                <TextView
+                    android:id="@+id/textView45"
+                    style="@style/subtitleFormat2"
+                    android:text="@string/age"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPersonName" />
+
+                <TextView
+                    android:id="@+id/tvPersonAge"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.age}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView45" />
+
+                <TextView
+                    android:id="@+id/textView46"
+                    style="@style/title2"
+                    android:layout_marginTop="35dp"
+                    android:text="@string/seenRep"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvPersonAge" />
+
+                <TextView
+                    android:id="@+id/textView47"
+                    style="@style/subtitleFormat2"
+                    android:layout_marginTop="25dp"
+                    android:text="@string/elabDate"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView46" />
+
+                <TextView
+                    android:id="@+id/tvElabDate"
+                    style="@style/textFormat2"
+                    android:text="@={vmNewReport.elabDate}"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView47" />
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TilSeenDate"
+                    style="@style/firstInputLayout"
+                    android:hint="@string/seenDate"
+                    app:errorEnabled="@{vmNewReport.enableDateError}"
+                    app:errorText="@{vmNewReport.error}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/tvElabDate">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/TietDate"
+                        style="@style/editText"
+                        android:clickable="true"
+                        android:cursorVisible="false"
+                        android:drawableEnd="@drawable/ic_calendar_today_24px"
+                        android:drawableRight="@drawable/ic_calendar_today_24px"
+                        android:focusable="false"
+                        android:fontFamily="@font/ralewayregular"
+                        android:hint="@string/seenDate"
+                        android:inputType="date"
+                        android:onClick="@{() -> vmNewReport.showCalendar()}"
+                        android:text="@={vmNewReport.seenDate}"
+                        android:textColor="@android:color/black" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TilTown"
+                    style="@style/layoutDropDownMenu"
+                    android:layout_width="match_parent"
+                    app:errorEnabled="@{vmNewReport.enableTownError}"
+                    app:errorText="@{vmNewReport.error}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TilSeenDate">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/townMenu"
+                        style="@style/autoCompleteTextView"
+                        android:layout_width="match_parent"
+                        android:hint="@string/town"
+                        android:text="@={vmNewReport.town}" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TilAddrDetail"
+                    style="@style/firstInputLayout"
+                    android:hint="Colonia, calle y número (opcional)"
+                    app:errorEnabled="@{vmNewReport.enableAddrError}"
+                    app:errorText="@{vmNewReport.addrError}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TilTown">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etName"
+                        style="@style/editText"
+                        android:hint="Colonia, calle y número (opcional)"
+                        android:text="@={vmNewReport.addrDetail}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TilseenClothes"
+                    style="@style/firstInputLayout"
+                    android:hint="@string/clothes"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TilAddrDetail">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/EtSeenClothes"
+                        style="@style/editText"
+                        android:hint="@string/clothes"
+                        android:text="@={vmNewReport.clothes}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/TilseenDetails"
+                    style="@style/firstInputLayout"
+                    android:layout_width="match_parent"
+                    android:hint="@string/seenDetails"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TilseenClothes">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/EtSeenDetails"
+                        style="@style/editText"
+                        android:hint="@string/seenDetails"
+                        android:inputType="text|textMultiLine"
+                        android:text="@={vmNewReport.details}" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_ok"
+                    style="@style/FillButton"
+                    android:enabled="@{vmNewReport.isGenerateBtnSelected}"
+                    android:fontFamily="@font/ralewaybold"
+                    android:onClick="@{() -> vmNewReport.configToGenerate()}"
+                    android:text="Generar reporte"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/TilseenDetails" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

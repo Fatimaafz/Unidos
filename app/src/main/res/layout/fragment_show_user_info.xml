@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools" >
     <data> <!-- we'll bind design components properties to data sources (ViewModel) -->
         <!-- A variable to define binding expressions -->
+        <import type="android.view.View" />
         <variable
             name="vmUsrInfo"
             type="com.example.unidos.accountManagement.UserInfoViewModel"/> <!-- This layout'll be bound to the Account Management ViewModel class -->
@@ -26,7 +27,7 @@
                 style="@style/AppTheme.background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:visibility="gone"
+                android:visibility= "@{vmUsrInfo.showLoadingElement ? View.VISIBLE : View.GONE}"
                 android:gravity="center"
                 android:orientation="vertical">
                 <ProgressBar
@@ -57,9 +58,11 @@
 
                 <TextView
                     android:id="@+id/maUserName"
-                    style="@style/TitleFormat"
+                    style="@style/title2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    app:autoSizeTextType="uniform"
+                    android:gravity="center"
                     android:text="@={vmUsrInfo.name}"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -67,7 +70,7 @@
 
                 <TextView
                     android:id="@+id/textView7"
-                    style="@style/subtitleFormat"
+                    style="@style/subtitleFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/curp"
@@ -76,7 +79,7 @@
 
                 <TextView
                     android:id="@+id/textView2"
-                    style="@style/subtitleFormat"
+                    style="@style/subtitleFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/genre"
@@ -85,7 +88,7 @@
 
                 <TextView
                     android:id="@+id/maUserCURP"
-                    style="@style/normalText"
+                    style="@style/textFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={vmUsrInfo.curp}"
@@ -94,7 +97,7 @@
 
                 <TextView
                     android:id="@+id/maUserGenre"
-                    style="@style/normalText"
+                    style="@style/textFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={vmUsrInfo.genre}"
@@ -103,25 +106,25 @@
 
                 <TextView
                     android:id="@+id/textView10"
-                    style="@style/subtitleFormat"
+                    style="@style/subtitleFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/birthdate"
                     app:layout_constraintStart_toStartOf="@+id/guideline4"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                    app:layout_constraintTop_toTopOf="@+id/guideline14" />
 
                 <TextView
                     android:id="@+id/textView12"
-                    style="@style/subtitleFormat"
+                    style="@style/subtitleFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/phone"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView7" />
+                    app:layout_constraintTop_toTopOf="@+id/guideline14" />
 
                 <TextView
                     android:id="@+id/maUserPhone"
-                    style="@style/normalText"
+                    style="@style/textFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={vmUsrInfo.phone}"
@@ -130,7 +133,7 @@
 
                 <TextView
                     android:id="@+id/maUserBirthDay"
-                    style="@style/normalText"
+                    style="@style/textFormat2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@={vmUsrInfo.birthdate}"
@@ -142,9 +145,11 @@
                     android:layout_width="60dp"
                     android:layout_height="70dp"
                     android:layout_marginTop="200dp"
+
+                    app:iconTint="@color/white"
                     android:gravity="center_vertical|center_horizontal"
                     android:onClick="@{() -> vmUsrInfo.logout()}"
-                    app:icon="@drawable/ic_notificationicon"
+                    app:icon="@drawable/ic_exit_to_app_24px"
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
                     app:iconSize="20dp"
@@ -159,10 +164,9 @@
                     android:layout_width="60dp"
                     android:layout_height="70dp"
                     android:layout_marginTop="200dp"
-
                     android:gravity="center_vertical|center_horizontal"
-                    android:onClick="@{() -> vmUsrInfo.deleteAccount()}"
-                    app:icon="@drawable/ic_black_male_user_symbol"
+                    android:onClick="@{() -> vmUsrInfo.confirmAction()}"
+                    app:icon="@drawable/ic_delete"
                     app:iconGravity="textStart"
                     app:iconPadding="0dp"
                     app:iconSize="20dp"
@@ -179,6 +183,13 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     app:layout_constraintGuide_percent="0.5" />
+
+                <androidx.constraintlayout.widget.Guideline
+                    android:id="@+id/guideline14"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintGuide_percent="0.22" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

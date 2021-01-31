@@ -1,22 +1,27 @@
-package com.example.unidos;
+package com.example.unidos.repository;
 //change
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+
+import com.example.unidos.ElementoObservable;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class UserRepository {
-    FirebaseFirestore db;
+    private FirebaseFirestore db;
 
     /** Observable variables with observers in other
      * classes will be able to observe. **/
@@ -30,11 +35,13 @@ public class UserRepository {
     private ElementoObservable<Boolean> deleteUserObservable;
     private ElementoObservable<Boolean> userUpdateObservable;
     private User user;
-    public ElementoObservable<Integer> userInfoExist;
+    private ElementoObservable<Integer> opResult;
+    private CollectionReference userCollection;
 
     public UserRepository() {
         createInstance();
         insertStatusObservable = new ElementoObservable<>();
+        userCollection = db.collection(FieldConstant.COLLECTION_USER);
         checkPhoneExistenceObservable = new ElementoObservable<>();
         checkCurpExistenceObservable = new ElementoObservable<>();
         deleteUserObservable = new ElementoObservable<>();
@@ -43,7 +50,7 @@ public class UserRepository {
     }
 
     public void initObservable(){
-        userInfoExist = new ElementoObservable<>();
+        opResult = new ElementoObservable<>();
     }
 
     public User getUser() {
@@ -54,7 +61,9 @@ public class UserRepository {
         db =  FirebaseFirestore.getInstance();
     }
 
-    public ElementoObservable getUserInfo(){ return userInfoExist; }
+    public ElementoObservable<Integer> getOpResult() {
+        return opResult;
+    }
 
     public ElementoObservable getUserUpdateObservable(){return userUpdateObservable;}
 
@@ -119,7 +128,7 @@ public class UserRepository {
          * every document in user collection in order
          * to know if a field phoneNumber matches
          * with the number specified. */
-        db.collection("user")
+        userCollection
                 .whereEqualTo("phoneNumber", telephNumber)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -133,15 +142,18 @@ public class UserRepository {
                                 /** Update the observable value so that
                                  * the observer can execute an action
                                  * 1 indicates the phone is not registered. **/
+                                opResult.setElemento(-2);
                                 checkPhoneExistenceObservable.setElemento(1);
                             }else{
                                 /** Update the observable value so that
                                  * the observer can execute an action
                                  * -1 indicates the phone is registered. **/
+                                opResult.setElemento(1);
                                 checkPhoneExistenceObservable.setElemento(-1);
                             }
                         } else {
                             /** An error happened during the searching. **/
+                            opResult.setElemento(-1);
                             checkPhoneExistenceObservable.setElemento(-2);
                         }
                     }
@@ -154,9 +166,9 @@ public class UserRepository {
         /** The data must be passed to Firebase
          * on a key-value structure. **/
         Map<String, String> u = new HashMap<>();
-        u.put("firstName", user.getFirstName());
-        u.put("surname1", user.getSurname1());
-        u.put("dateBirth", user.getDateBirth());
+        u.put("name", user.getFirstName());
+        u.put("surname", user.getSurname1());
+        u.put("birthDate", user.getDateBirth());
         u.put("sex", user.getSex());
         u.put("phoneNumber", user.getTelephNumber());
 
@@ -164,14 +176,14 @@ public class UserRepository {
          * were provided and if not,
          * skip the values from the map. */
         if (!(user.getSecondName() == null))
-            u.put("secondName", user.getSecondName());
+            u.put("name2", user.getSecondName());
         if (!(user.getSurname2() == null))
             u.put("surname2", user.getSurname2());
 
         /** Reference to the location in which
          * we need to search, in this case
          * Firebase will write a new document. **/
-        db.collection("user").document(user.getCURP()).set(u).addOnCompleteListener(new OnCompleteListener<Void>() {
+        userCollection.document(user.getCURP()).set(u).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             /** If firebase can perform the searching. **/
             public void onComplete(@NonNull Task<Void> task) {
@@ -197,7 +209,7 @@ public class UserRepository {
          * search, in this case Firebase will read
          * every document id (CURP) in user collection
          * till found coincidences. */
-        final DocumentReference docRef = db.collection("user").document(curp);
+        final DocumentReference docRef = userCollection.document(curp);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -214,49 +226,39 @@ public class UserRepository {
                          * so that the observer can execute an action **/
                         /**  -1 indicates the CURP
                          * is already registered. **/
-                        Log.i("***User data: ", document.getData().toString());
-                        Log.i("***value: ", document.get("firstName").toString());
                         user = document.toObject(User.class);
                         user.setCURP(curp);
-
-
-                        Log.i("///", "REPOSITORY");
-
-                        userInfoExist.setElemento(1);
+                        opResult.setElemento(1);
                     } else {
                         /** Update the observable value so that
                          * the observer can execute an action
                          * 1 indicates the CURP is not registered. **/
-                        userInfoExist.setElemento(0);
+                        opResult.setElemento(-2);
                     }
                 } else {
                     /** An error happened during the searching. **/
-                    userInfoExist.setElemento(-1);
+                    opResult.setElemento(-1);
                 }
             }
         });
     }
 
-    public void updateUserInfo(Map<String, Object> map){
+    public void updateUserInfo(Map<String, Object> map, String curp){
         Log.i("@@@@ {{{{{{{{", "UPDATE METHOD!!!");
-        DocumentReference ref = db.collection("user").document(map.get("curp").toString());
-
-        if(!map.containsKey("surname2"))
-            map.put("surname2", FieldValue.delete());
-
-        if(!map.containsKey("secondName"))
-            map.put("secondName", FieldValue.delete());
+        DocumentReference ref = userCollection.document(curp);
 
         ref.update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Log.i("@@@", "success");
+                //opResult.setElemento(1);
                 userUpdateObservable.setElemento(true);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.i("@@@", "fail");
+                //opResult.setElemento(-1);
                 userUpdateObservable.setElemento(false);
             }
         });
@@ -264,7 +266,7 @@ public class UserRepository {
 
 
     public void deleteUser(String curp){
-        db.collection("user").document(curp)
+        userCollection.document(curp)
                 .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
@@ -276,6 +278,44 @@ public class UserRepository {
                 deleteUserObservable.setElemento(false);
             }
         });
+    }
+
+
+
+    public void checkDataExistence(String fieldKey, String value){
+        userCollection
+                .whereEqualTo(fieldKey, value)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        /** If firebase can perform
+                         * the searching. **/
+                        if (task.isSuccessful()) {
+                            /** Did Firebase find results? **/
+                            if(task.getResult().isEmpty()){
+                                /** Update the observable value so that
+                                 * the observer can execute an action
+                                 * 1 indicates the phone is not registered. **/
+                                Log.i(",,,", "IS EMPTY");
+                                opResult.setElemento(-2);
+                                checkPhoneExistenceObservable.setElemento(1);
+                            }else{
+                                /** Update the observable value so that
+                                 * the observer can execute an action
+                                 * -1 indicates the phone is registered. **/
+                                Log.i(",,,", "PHONE EXIST");
+                                opResult.setElemento(1);
+                                checkPhoneExistenceObservable.setElemento(-1);
+                            }
+                        } else {
+                            /** An error happened during the searching. **/
+                            Log.i(",,,", "ERROR");
+                            opResult.setElemento(-1);
+                            checkPhoneExistenceObservable.setElemento(-2);
+                        }
+                    }
+                });
     }
 }
 

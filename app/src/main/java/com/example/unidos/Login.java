@@ -1,23 +1,43 @@
 package com.example.unidos;
 //changeq
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.InputFilter;
+import android.util.ArrayMap;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import com.example.unidos.access.Menu;
 import com.example.unidos.databinding.ActivityMainBinding;
+import com.example.unidos.report.ReportContainer;
+import com.example.unidos.repository.ReportedPerson;
+import com.example.unidos.searching.Search;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.gson.Gson;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Map;
 
 public class Login extends AppCompatActivity {
     ProgressBar progressBar;
     TextInputLayout curp ;
     private Messages msg = new Messages();
+    private LoginViewModel loginViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) { // when the activity is started
@@ -26,16 +46,28 @@ public class Login extends AppCompatActivity {
          * is bound with the layout activity_main. **/
         ActivityMainBinding binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
 
-        PersistentData pd = new PersistentData(this);
-        pd.checkExistence();
+        /*if(getIntent() != null){
+            Log.i("^^^{", "I want to start a new activity");
+            if(getIntent().getExtras() != null)
+                Log.i("^^^{ EXT", getIntent().getExtras().toString());
+            //checkIntent(getIntent());
+        }else {
+
+            PersistentData pd = new PersistentData(this);
+            pd.checkExistence();
+        }*/
 
         /** An instance of the class LoginViewModel
          * which will be bound to the activity_main layout **/
-        final LoginViewModel loginViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(LoginViewModel.class);
+        loginViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication()).create(LoginViewModel.class);
         /** To indicate which is the ViewModel of the Binding class **/
         binding.setViewmodel(loginViewModel);
         /** This class will be owner of "binding". **/
         binding.setLifecycleOwner(this);
+
+        curp= findViewById(R.id.TilCurp);
+
+        determineActivityToStart();
 
         /** we'll be observing and waiting for the
          * layout component CURP changes. **/
@@ -58,7 +90,6 @@ public class Login extends AppCompatActivity {
             /** The set value is obtained **/
             public void onChanged(String s) {
                 /** A reference to the EditText CURP **/
-                curp= findViewById(R.id.TilCurp);
                 /** the error must be enable in order to display the message. **/
                 curp.setErrorEnabled(true);
 
@@ -86,7 +117,7 @@ public class Login extends AppCompatActivity {
                 /** Identify the progressBar. **/
                 progressBar = findViewById(R.id.progress_circular);
                 /** Lets check the action to execute. **/
-                switch (s){
+                switch (s) {
                     case "showProgressBar":
                         progressBar.setVisibility(View.VISIBLE);
                         /** LoginViewModel needs the cobtext of this class
@@ -99,8 +130,8 @@ public class Login extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         /** Save the CURP to stay log every time
                          * the user execute the app. **/
-                        loginViewModel.savePersistentData(getApplicationContext());
-
+                        new PersistentData(getApplicationContext()).setValues(loginViewModel.getCURP());
+                        determineActivityToStart();
                         break;
                     case "operationFailed": // If an error occur during the search.
                         /** Display an error message. **/
@@ -129,11 +160,135 @@ public class Login extends AppCompatActivity {
             public void onChanged(Boolean aBoolean) {
                 if (aBoolean){
                     Intent newAccountIntent = new Intent(getApplicationContext(), NewAccount.class);
+                    if(getIntent().getExtras() != null){
+                        if(!getIntent().getExtras().isEmpty())
+                            newAccountIntent.putExtras(getIntent().getExtras());
+                    }
                     startActivity(newAccountIntent);
                 }
             }
         });
     }
+
+    private void goToMainActivity(){
+        Intent i = new Intent(this, Menu.class);
+        startActivity(i);
+    }
+
+    private void goToPersonInfo(ReportedPerson person){
+        /*ReportedPerson person = new ReportedPerson();
+        person.setName("Juana");
+        person.setName2("La Cubana");
+        person.setFound(false);
+        person.setMissingPlace(15);
+        person.setRecSeenDate(Calendar.getInstance().getTime());*/
+
+        Intent i = new Intent(this, ReportContainer.class);
+        i.putExtra("SelPerson", new Gson().toJson(person));
+        i.putExtra("notif", 1);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        //i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        startActivity(i);
+    }
+
+    private void goToListPeople(){
+        Intent i = new Intent(this, Search.class);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(i);
+    }
+
+    private void checkDistance(Bundle bundle, LatLng userLoc){
+        loginViewModel.getOpResPerson().observe(this, new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer res) {
+                switch (res){
+                    case 1:
+                        goToPersonInfo(loginViewModel.getPerson());
+                        break;
+                    case -1:
+                        showMessage(Messages.MSG003_1_OP_FAIL);
+                        break;
+                    case -2:
+                        showMessage(Messages.MSG003_1_OP_FAIL);
+                        break;
+                    case -3:
+                        goToListPeople();
+                }
+            }
+        });
+
+        loginViewModel.getIfPersonNear((String) bundle.get("CURP"),
+                new LatLng(Double.parseDouble(bundle.getString("lat")),
+                        Double.parseDouble(bundle.getString("lon"))),
+                userLoc
+                );
+    }
+
+    private void getUserLocation(final Bundle bundle){
+        FusedLocationProviderClient locationClient = LocationServices.getFusedLocationProviderClient(this);
+        Log.i("^^^{ ", "LETS GET USER LOC");
+        try {
+            locationClient.getLastLocation()
+                    .addOnSuccessListener(new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            Log.i("^^^{ ", "SUCCESS");
+                            // GPS location can be null if GPS is switched off
+                            if (location != null) {
+                                Log.i("^^^{  ", "We got the location");
+                                checkDistance(bundle, new LatLng(
+                                        location.getLatitude(),
+                                        location.getLongitude()
+                                ));
+                            }else if(location == null){
+                                //showMessage(Messages.MSG007_2_LOCATION_FAIL);
+                                Log.i("^^^{ ", "Loc is null");
+                                goToListPeople();
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("^^^{ ", "Error trying to get last GPS location");
+                            e.printStackTrace();
+                            goToListPeople();
+                        }
+                    });
+        } catch (SecurityException e) { e.printStackTrace(); }
+    }
+
+    private void determineActivityToStart(){
+        if(new PersistentData(this).checkExistence2()) {
+            Log.i("^^^{ ", "USER IS LOGGED");
+            if (getIntent().getExtras() != null) {
+                Bundle bundle = getIntent().getExtras();
+
+                Log.i("^^^{ ", "EXTRAS NOT NULL");
+                if (bundle.containsKey("click_action") || bundle.containsKey("log")) {
+                    Log.i("^^^{ in determact", "Notif has intent name");
+                    getUserLocation(bundle);
+                }
+            } else {
+                Log.i("^^^{ ", "EXTRAS R NULL");
+                goToMainActivity();
+            }
+        }
+    }
+
+    /*@Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i("^^^{", "Notif has intent name");
+        checkIntent(intent);
+    }
+
+    public void checkIntent(Intent intent) {
+        if (intent.hasExtra("click_action")) {
+            Log.i("^^^{", "checkIntent");
+            //ClickActionHelper.startActivity( this);
+        }
+    }*/
 
     /** Hide progress bar and show toast message **/
     public void showMessage(String message){

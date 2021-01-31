@@ -4,6 +4,13 @@ import android.content.Context;
 import android.util.Log;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+
+import com.example.unidos.repository.ReportedPerson;
+import com.example.unidos.repository.ReportedPersonRepository;
+import com.example.unidos.repository.User;
+import com.example.unidos.repository.UserRepository;
+import com.google.android.gms.maps.model.LatLng;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -13,6 +20,13 @@ public class NewAccountViewModel extends ViewModel {
     /** A live data variable notify views
      * when a change occur. **/
     /** To get the date value. **/
+
+    private ReportedPerson person = new ReportedPerson();
+    public MutableLiveData<Integer> opResult = new MutableLiveData<>();
+
+
+    public MutableLiveData<Boolean> isBtnPressed = new MutableLiveData<>();
+
     public MutableLiveData<String> date = new MutableLiveData<>();
     /** To tell the observer display the datepicker. **/
     public MutableLiveData<Boolean> btDate = new MutableLiveData<>();
@@ -59,6 +73,10 @@ public class NewAccountViewModel extends ViewModel {
     String curpRE= "^([A-Z][AEIOUX][A-Z]{2}\\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\\d|3[01])[HM](?:AS|B[CS]|C[CLMSH]|D[FG]|G[TR]|HG|JC|M[CNS]|N[ETL]|OC|PL|Q[TR]|S[PLR]|T[CSL]|VZ|YN|ZS)[B-DF-HJ-NP-TV-Z]{3}[A-Z\\d])(\\d)$";
 
     VerifyPhoneActivity verification = new VerifyPhoneActivity();
+
+    public ReportedPerson getPerson() {
+        return person;
+    }
 
     /** When the user presses the date EditText */
     public void displayDatePicker(){
@@ -414,29 +432,7 @@ public class NewAccountViewModel extends ViewModel {
     /** Execute its content every time
      * the user presses it. **/
     public void onRegisterClick(){
-        /** Inform the observer it must
-         * show the progress bar **/
-        actionBtNewAcc.setValue("showProgressBar");
-        /** Instance of Connection class
-         * Connection class will check the Internet connection */
-        Connection connection = new Connection(getContext());
-
-        /** If the phone hasn´t connection**/
-        if(connection.isNotConnected())
-        /** Inform the observer it must show an error message
-         and hide the progress bar. */
-            actionBtNewAcc.setValue("hideProgressBar:noConnected");
-        else if(connection.checkConnection()){
-            /** Is the connection stable?**/
-            System.out.println("Sí cuenta con la calidad deseada");
-            /** Continue with the register. **/
-            register();
-        } else{
-            /**Probably the connection is unstable. **/
-            /**Inform the observer it must show the progress bar
-             * and display an error message. */
-            actionBtNewAcc.setValue("hideProgressBar:hasntInternet");
-        }
+        isBtnPressed.setValue(true);
     }
 
     public void register(){
@@ -664,4 +660,32 @@ public class NewAccountViewModel extends ViewModel {
         this.selectedDate=selectedDate;
         date.setValue(selectedDate);
     }
+
+    public void getIfPersonNear(String curp, LatLng personLoc, LatLng userLocation) {
+        Log.i("^^^{ ", "lets get the info");
+        final ReportedPersonRepository personRepository = new ReportedPersonRepository();
+        if(personRepository.isPersonNear(personLoc, userLocation)) {
+            personRepository.getOpResult().addObserver(new Observer() {
+                @Override
+                public void update(Observable o, Object arg) {
+                    int res = (int) ((ElementoObservable) o).getElemento();
+                    switch (res) {
+                        case 1:
+                            person = personRepository.getPerson();
+                            opResult.setValue(1);
+                            break;
+                        case -1:
+                            opResult.setValue(-1);
+                            break;
+                        case -2:
+                            opResult.setValue(-2);
+                            break;
+                    }
+                }
+            });
+        }else
+            opResult.setValue(-3);
+        personRepository.getOnePerson( curp);
+    }
+
 }

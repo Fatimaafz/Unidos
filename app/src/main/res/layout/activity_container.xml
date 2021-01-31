@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <data>
+        <variable
+            name="vmShared"
+            type="com.example.unidos.report.ReportSharedViewModel" />
+    </data>
+
+    <FrameLayout
+        android:id="@+id/fragment_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/AppTheme.background">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.tabs.TabLayout
+                    style="@style/tabLayoutStyle"
+                    android:id="@+id/tabLayoutReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"/>
+
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/pagerReport"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    style="@style/AppTheme.background"/>
+
+            </LinearLayout>
+    </FrameLayout>
+</layout>

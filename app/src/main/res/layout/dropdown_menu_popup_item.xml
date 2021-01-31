@@ -3,7 +3,6 @@
     style="@style/AppTheme.background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
-    android:ellipsize="end"
-    android:maxLines="1"
-    android:textAppearance="?attr/textAppearanceSubtitle1"/>
+    android:padding="13dp"
+    android:fontFamily="@font/ralewayregular"
+    android:textSize="12dp"/>

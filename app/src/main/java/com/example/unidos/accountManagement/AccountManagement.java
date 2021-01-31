@@ -24,6 +24,8 @@ public class AccountManagement extends AppCompatActivity {
 
         binding.setLifecycleOwner(this);*/
 
+        Log.i("-->><<--", "Im the activity");
+
         fragmentManager = getSupportFragmentManager();
         if(findViewById(R.id.fragment_container) != null){
             if(savedInstanceState != null){

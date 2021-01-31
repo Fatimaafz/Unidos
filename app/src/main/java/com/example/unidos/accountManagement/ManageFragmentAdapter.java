@@ -7,7 +7,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 
 public class ManageFragmentAdapter extends FragmentStateAdapter {
-    Fragment userInfo;
 
     public ManageFragmentAdapter(Fragment fragment) {
         super(fragment);

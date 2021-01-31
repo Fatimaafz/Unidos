@@ -3,6 +3,9 @@
     package="com.example.unidos">
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -11,7 +14,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <service
+            android:name="com.example.unidos.messaging.MyFirebaseMessagingService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/default_notification_channel_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notificationicon" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCZcu9o5ER2O5UUj0xzm4KU8j3bDefbccs"/>
+
+        <activity android:name=".searching.Search" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.unidos.accountManagement.AccountManagement" android:configChanges="keyboardHidden|orientation|screenSize"/>
+        <activity android:name=".report.ReportContainer" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.unidos.access.Menu" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.unidos.NewAccount" android:configChanges="keyboardHidden|orientation|screenSize"/>
         <activity android:name="com.example.unidos.Login"

@@ -16,20 +16,26 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.databinding.DataBindingUtil;
+import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.unidos.Connection;
+import com.example.unidos.ElementoObservable;
 import com.example.unidos.Messages;
 import com.example.unidos.R;
-import com.example.unidos.User;
+import com.example.unidos.repository.User;
 import com.example.unidos.databinding.FragmentEditInfoBinding;
+import com.example.unidos.shared.Dialog;
+import com.example.unidos.shared.GeneralCalendar;
 import com.example.unidos.shared.KeyBoard;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Observable;
 
 
 import static android.content.Intent.FLAG_ACTIVITY_CLEAR_TOP;
@@ -40,40 +46,23 @@ public class EditUserInfo extends Fragment {
 
     private static int countName = 0;
     private  static final String[] options = new String[]{"Hombre", "Mujer"};
-    private String selection = "";
     private boolean getUserInfo;
-    Messages messages = new Messages();
+    private Connection connection;
+    int numError, numField;
 
-    AutoCompleteTextView sex;
+    private AutoCompleteTextView sex;
     TextInputLayout name, name2, lastName, lastName2, date, tilSex, phone, curp;
+    private  ArrayAdapter<String> adapter;
 
     private AccountManagementViewModel accountManagementViewModel;
     private EditUserInfoViewModel vm;
-
-    /* --- > @Nullable
-    @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
-                             @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(container, savedInstanceState);
-
-        FragmentEditInfoBinding binding = DataBindingUtil.inflate(inflater, R.layout.fragment_edit_info, container, false);
-        accountManagementViewModel = ViewModelProvider.AndroidViewModelFactory.getInstance(getActivity().getApplication()).create(AccountManagementViewModel.class);
-        view = binding.getRoot();
-        binding.setVmEditUserInfo(accountManagementViewModel);
-
-        return view;
-    } */
-
+    private User u;
 
     public void onCreate(Bundle savedInstanceState) {
         Log.i("@@@@ OnCreate", "Edit info");
+        u= new User();
+        connection = new Connection(getContext());
         super.onCreate(savedInstanceState);
-    }
-
-
-    public void onResume(){
-        super.onResume();
-        Log.i("@@@@-----", "onResume----");
     }
 
     public void initFields(View view){
@@ -84,6 +73,7 @@ public class EditUserInfo extends Fragment {
         date = view.findViewById(R.id.TilBirthDate);
         tilSex = view.findViewById(R.id.TilGender);
         phone = view.findViewById(R.id.TilPhone);
+        adapter = new ArrayAdapter<>( getContext(), R.layout.dropdown_menu_popup_item, options);
     }
 
     @Nullable
@@ -96,194 +86,215 @@ public class EditUserInfo extends Fragment {
         binding.setVmEditInfo(vm);
         initFields(view);
         sex = view.findViewById(R.id.sexMenu);
-        Log.i("@@@@ -----", "------");
-
-        String[] COUNTRIES = new String[] {"Item 1", "Item 2", "Item 3", "Item 4"};
-
-        ArrayAdapter<String> adapter = new ArrayAdapter<>( getContext(), R.layout.dropdown_menu_popup_item, COUNTRIES);
-
-        AutoCompleteTextView editTextFilledExposedDropdown = view.findViewById(R.id.sexMenu);
-        editTextFilledExposedDropdown.setAdapter(adapter);
+        final GeneralCalendar calendar = new GeneralCalendar(getContext());
 
         TextInputEditText editText = view.findViewById(R.id.TietPhone);
         editText.setTransformationMethod(new KeyBoard());
 
-        vm.setContext(getContext());
 
+        vm.onMenuClick.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean aBoolean) {
+                sex.setAdapter(adapter);
+                sex.showDropDown();
+            }
+        });
 
         vm.name.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                countName++;
-                Log.i("@@@@ Count ", String.valueOf(countName));
-                Log.i("@@@@ Field: ", "0");
-                vm.setNumberOfField(0);
-                vm.validateName(s);
+                vm.validateName(0, s);
             }
         });
 
         vm.name2.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.i("@@@@ Field: ", "1");
-                vm.setNumberOfField(1);
-                vm.validateName(s);
+                vm.validateName(1, s);
             }
         });
 
         vm.lastName.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.i("@@@@ Field: ", "2");
-                vm.setNumberOfField(2);
-                vm.validateName(s);
+                vm.validateName(2, s);
             }
         });
 
         vm.lastName2.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.i("@@@@ Field: ", "3");
-                vm.setNumberOfField(3);
-                vm.validateName(s);
+                vm.validateName(3, s);
             }
         });
 
-        vm.isFieldDateSelected.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+
+
+        vm.sex.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
-            public void onChanged(Boolean aBoolean) {
-                DatePickerDialog datePickerDialog = setCalendar(vm);
-                /** show the calendar */
-                datePickerDialog.show();
+            public void onChanged(String s) {
+                vm.checkSex();
             }
         });
 
-        vm.isFieldSexSelected.observe(getViewLifecycleOwner(), new Observer<Boolean>() {
-            @Override
-            public void onChanged(Boolean aBoolean) {
-                setDropDownMenu(vm);
-                sex.showDropDown();
-            }
-        });
+
 
         vm.phone.observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(String s) {
-                Log.i("@@@@ Field: ", "6");
                 vm.validatePhone();
             }
         });
 
-        vm.fieldError.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+        vm.getConfigCalendar().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(Integer integer) {
-                switch (integer) {
-                    case 0 :
-                        name.setErrorEnabled(true);
-                        name.setError(messages.findMessage(vm.getErrorMessage()));
+            public void onChanged(Boolean configure) {
+                if(configure) {
+                    calendar.getDate().addObserver(new java.util.Observer() {
+                        @Override
+                        public void update(Observable o, Object arg) {
+                            vm.setBirthDate(String.valueOf(((ElementoObservable) o).getElemento()));
+                            vm.checkDate();
+                        }
+                    });
+                    calendar.setCalendar(18,100).show();
+                }
+            }
+        });
+
+        vm.getOpResult().observe(getViewLifecycleOwner(), new Observer<Integer>() {
+            @Override
+            public void onChanged(Integer result) {
+                switch (result){
+                    case 1:
+                        getUserInfo = true;
+                        showUserinfo();
                         break;
-                    case 1 :
-                        name2.setErrorEnabled(true);
-                        name2.setError(messages.findMessage(vm.getErrorMessage()));
+                    case -1:
+                        showToast(Messages.MSG003_1_OP_FAIL);
+                        getUserInfo = false;
                         break;
-                    case 2 :
-                        lastName.setErrorEnabled(true);
-                        lastName.setError(messages.findMessage(vm.getErrorMessage()));
+                    case -2:
+                        showToast(Messages.MSG005_1_AUTOVERIF_FAILED);
+                        getUserInfo = false;
                         break;
-                    case 3 :
-                        lastName2.setErrorEnabled(true);
-                        lastName2.setError(messages.findMessage(vm.getErrorMessage()));
+                    case -3:
+                        showToast(Messages.MSG002_3_NO_INFO_CHANGE);
+                        getUserInfo = false;
                         break;
-                    case 4:
-                        date.setErrorEnabled(true);
-                        date.setError(messages.findMessage(vm.getErrorMessage()));
+                    case -4:
+                        showToast(Messages.MSG002_2_PHONE_DUPLICATED);
+                        getUserInfo = false;
                         break;
-                    case 5:
-                        tilSex.setErrorEnabled(true);
-                        tilSex.setError(messages.findMessage(vm.getErrorMessage()));
-                        break;
-                    case 6:
-                        phone.setErrorEnabled(true);
-                        phone.setError(messages.findMessage(vm.getErrorMessage()));
+                    case -5:
+                        showToast(Messages.MSG003_1_OP_FAIL);
+                        getUserInfo = true;
+                        showUserinfo();
                         break;
                 }
             }
         });
 
-        vm.validField.observe(getViewLifecycleOwner(), new Observer<Integer>() {
+
+
+        vm.getNumField().observe(getViewLifecycleOwner(), new Observer<Integer>() {
             @Override
-            public void onChanged(Integer integer) {
-                switch (integer) {
+            public void onChanged(Integer field) {
+                numField = field;
+                numError = vm.getError();
+                switch (field){
                     case 0:
-                        name.setErrorEnabled(false);
+                        name.setErrorEnabled(enableError(numError));
+                        name.setError(getErrorMessage());
                         break;
                     case 1:
-                        name2.setErrorEnabled(false);
+                        name2.setErrorEnabled(enableError(numError));
+                        name2.setError(getErrorMessage());
                         break;
                     case 2:
-                        lastName.setErrorEnabled(false);
+                        lastName.setErrorEnabled(enableError(numError));
+                        lastName.setError(getErrorMessage());
                         break;
                     case 3:
-                        lastName2.setErrorEnabled(false);
+                        lastName2.setErrorEnabled(enableError(numError));
+                        lastName2.setError(getErrorMessage());
                         break;
                     case 4:
-                        date.setErrorEnabled(false);
+                        date.setErrorEnabled(enableError(numError));
+                        date.setError(getErrorMessage());
                         break;
                     case 5:
-                        tilSex.setErrorEnabled(false);
+                        tilSex.setErrorEnabled(enableError(numError));
+                        tilSex.setError(getErrorMessage());
                         break;
                     case 6:
-                        phone.setErrorEnabled(false);
+                        phone.setErrorEnabled(enableError(numError));
+                        phone.setError(getErrorMessage());
                         break;
                 }
             }
         });
 
-        vm.opResult.observe(getViewLifecycleOwner(), new Observer<String>() {
+        vm.getCheckConnection().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
             @Override
-            public void onChanged(String s) {
-
-                Messages msg = new Messages();
-                if(s.equals("update")) {
-                    Toast.makeText(getContext(), messages.findMessage(s), Toast.LENGTH_SHORT).show();
-                    Log.i("@@@@ ", "IM GOING TO UPDATE");
-                    Intent i = new Intent(getActivity(), AccountManagement.class);
-                    i.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(i);
-                    getUserInfo = true;
-                }else {
-                    Log.i("@@@@ ", "I detected a change");
-                    Toast.makeText(getActivity(), msg.findMessage(s), Toast.LENGTH_SHORT).show();
-                    getUserInfo = false;
-                }
+            public void onChanged(Boolean check) {
+                if(check)
+                    if(connection.isConnected())
+                        vm.saveChanges();
+                    else
+                        showToast(Messages.MSG004_1_NO_INTERNET);
             }
         });
-
 
         return view;
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState){
-        super.onActivityCreated(savedInstanceState);
-        Log.i("@@@@-----", "onActivityCreated----");
+    private void showUserinfo(){
+        Log.i("@@@@ ", "IM GOING TO UPDATE");
+        Intent i = new Intent(getActivity(), AccountManagement.class);
+        i.addFlags(FLAG_ACTIVITY_CLEAR_TOP | FLAG_ACTIVITY_NEW_TASK);
+        startActivity(i);
+    }
 
+    private boolean enableError(int error){
+        if(error == 1)
+            return false;
+        else return true;
+    }
+
+    private String getErrorMessage(){
+        switch (numError){
+            case 1:
+                return "";
+            case 0:
+                return Messages.MSG006_1_EMPTY_FIELD;
+            case -1:
+                if(numField == 6)
+                    return Messages.MSG006_2_1_WRONG_PHONE_SYNTAX;
+                else
+                    return Messages.MSG006_2_2_WRONG_NAME_SYNTAX;
+        }
+        return "";
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        Log.i("@@@@ onViewCreated", "Edit info");
         accountManagementViewModel =  new ViewModelProvider(requireActivity()).get(AccountManagementViewModel.class);
-
         accountManagementViewModel.getSharedUserInfo().observe(getViewLifecycleOwner(), new Observer<User>() {
             @Override
             public void onChanged(User user) {
                 Log.i("@@@@ onCHANGED", "Edit info");
                 if(user != null) {
+                    Log.i("###", "I received a non null");
+                    u= user;
                     vm.setUser(user);
                     vm.setFieldValue();
-                }else
-                    Toast.makeText(getContext(), messages.findMessage("fail"), Toast.LENGTH_SHORT);
+                }else {
+                    Log.i("###", "I received a null");
+                    vm.buttonEnabled.setValue(false);
+                    //vm.changeFieldState();
+                    showToast(Messages.MSG003_1_OP_FAIL);
+                }
             }
         });
 
@@ -293,76 +304,19 @@ public class EditUserInfo extends Fragment {
                 Log.i("@@@@", "->><<-I want to change the tab");
                 if(change){
                     //if(!(Boolean.parseBoolean(String.valueOf(accountManagementViewModel.getRetrieveInfo()))))
+                    if(u != null){
+                        vm.setUser(u);
+                        vm.setFieldValue();
+                    }
                     if(!getUserInfo)
                         accountManagementViewModel.setRetrieveInfo(false);
                 }
             }
         });
-
     }
 
-
-    public DatePickerDialog setCalendar(final EditUserInfoViewModel vm){
-        final Calendar c = Calendar.getInstance();
-        /** get the day, month and year **/
-        final int mYear = c.get(Calendar.YEAR), mMonth = c.get(Calendar.MONTH), mDay = c.get(Calendar.DAY_OF_MONTH);
-        /** The listener indicate the user has finished selecting a date. **/
-        DatePickerDialog datePickerDialog=new DatePickerDialog(
-                getContext(), new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                /** set a date right format to a variable. **/
-                String selectedDate = "";
-                if(dayOfMonth<10 && month<10) {
-                    selectedDate = "0"+dayOfMonth + "/0" + (month+1) + "/" + year;
-                }else if(dayOfMonth<10)
-                    selectedDate = "0"+dayOfMonth + "/" + (month+1) + "/" + year;
-                else if(month<10)
-                    selectedDate = dayOfMonth + "/0" + (month+1) + "/" + year;
-                else
-                    selectedDate = ""+dayOfMonth + "/" + (month+1) + "/" + year;
-                /** call to the method in order to pass the date selected on every click **/
-                vm.checkDate(selectedDate);
-            }
-        }, mYear, mMonth, mDay);
-
-        /** Configure the date to display, the system wont allow register minors **/
-        Date today= new Date();
-        c.setTime(today);
-        c.add(Calendar.YEAR, -18);
-        long maxDate = c.getTime().getTime();
-        datePickerDialog.getDatePicker().setMaxDate(maxDate);
-        c.setTime(today);
-        c.add(Calendar.YEAR, -100);
-        long minDate= c.getTime().getTime();
-        datePickerDialog.getDatePicker().setMinDate(minDate);
-        return datePickerDialog;
+    private void showToast(String msg){
+        Toast.makeText(getContext(), msg, Toast.LENGTH_SHORT).show();
     }
 
-    public void setDropDownMenu(final EditUserInfoViewModel vm){
-        System.out.println("DEBO MOSTRAR EL MENÚ");
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(getContext(), R.layout.dropdown_menu_popup_item, options);
-        sex.setAdapter(adapter);
-        sex.setOnItemClickListener(new AdapterView.OnItemClickListener(){
-            /** To know which option was selected. **/
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3){
-                selection = (String) arg0.getItemAtPosition(arg2);
-                Log.i("SELECTED TEXT WAS---->", selection);
-                /** To send the value to NewAccountViewModel **/
-                vm.checkSex(selection);
-            }
-        });
-    }
-
-    @Override
-    public void onPause() {
-        Log.i("@@@@ ----> onPause", "Edit info");
-        super.onPause();
-    }
-
-    public void onStop() {
-        Log.i("@@@@ onStop", "Show info");
-        super.onStop();
-
-    }
 }

@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <variable
+            name="vmPersonDetails"
+            type="com.example.unidos.report.PersonDetailsViewModel" />
+    </data>
+
+    <ScrollView
+        style="@style/AppTheme.background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            style="@style/AppTheme.background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="8dp">
+
+            <ImageView
+                android:id="@+id/ivPerson"
+                style="@style/imageViewStyle"
+                app:layout_constraintBottom_toTopOf="@+id/guideline10"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:srcCompat="@tools:sample/avatars" />
+
+            <TextView
+                android:id="@+id/tvName"
+                style="@style/title2"
+                android:gravity="center"
+                android:fontFamily="@font/ralewaybold"
+                android:text="@={vmPersonDetails.name}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline10" />
+
+            <TextView
+                android:id="@+id/textView"
+                style="@style/subtitleFormat2"
+                android:text="@string/sex"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+            <TextView
+                android:id="@+id/tvSex"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.sex}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+            <TextView
+                android:id="@+id/textView4"
+                style="@style/subtitleFormat2"
+                android:text="@string/age"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvSex" />
+
+            <TextView
+                android:id="@+id/textView37"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.age}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView4" />
+
+            <TextView
+                android:id="@+id/textView5"
+                style="@style/subtitleFormat2"
+                android:text="@string/nationallity"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/tvSex" />
+
+            <TextView
+                android:id="@+id/textView6"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.nat}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView5" />
+
+            <TextView
+                android:id="@+id/textView8"
+                style="@style/subtitleFormat2"
+                android:text="@string/comp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+
+            <TextView
+                android:id="@+id/textView9"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.complexion}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+
+            <TextView
+                android:id="@+id/textView11"
+                style="@style/subtitleFormat2"
+                android:text="@string/skin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView9" />
+
+            <TextView
+                android:id="@+id/comp"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.skin}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView11" />
+
+            <TextView
+                android:id="@+id/textView16"
+                style="@style/subtitleFormat2"
+                android:text="@string/lips"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/comp" />
+
+            <TextView
+                android:id="@+id/lips"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.lips}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView16" />
+
+            <TextView
+                android:id="@+id/textView15"
+                style="@style/subtitleFormat2"
+                android:text="@string/eyeColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/lips" />
+
+            <TextView
+                android:id="@+id/eyeColor"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.eyeColor}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+            <TextView
+                android:id="@+id/textView23"
+                style="@style/subtitleFormat2"
+                android:text="@string/eyeShape"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/nose" />
+
+            <TextView
+                android:id="@+id/eyeShape"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.eyeShape}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+
+            <TextView
+                android:id="@+id/textView22"
+                style="@style/subtitleFormat2"
+                android:text="@string/hairColor"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/eyeColor" />
+
+            <TextView
+                android:id="@+id/hairColor"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.hairColor}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView22" />
+
+            <TextView
+                android:id="@+id/textView24"
+                style="@style/subtitleFormat2"
+                android:text="@string/hairShape"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/eyeShape" />
+
+            <TextView
+                android:id="@+id/hairShape"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.hairShape}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView24" />
+
+            <TextView
+                android:id="@+id/textView17"
+                style="@style/subtitleFormat2"
+                android:text="@string/status"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView48" />
+
+            <TextView
+                android:id="@+id/status"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.status}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+            <TextView
+                android:id="@+id/textView18"
+                style="@style/subtitleFormat2"
+                android:text="@string/height"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView49" />
+
+            <TextView
+                android:id="@+id/height"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.height}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView18" />
+
+            <TextView
+                android:id="@+id/textView19"
+                style="@style/subtitleFormat2"
+                android:text="@string/face"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/height" />
+
+            <TextView
+                android:id="@+id/face"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.face}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView19" />
+
+            <TextView
+                android:id="@+id/textView20"
+                style="@style/subtitleFormat2"
+                android:text="@string/nose"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/face" />
+
+            <TextView
+                android:id="@+id/nose"
+                style="@style/textFormat2"
+                android:text="@={vmPersonDetails.nose}"
+                app:layout_constraintStart_toStartOf="@+id/guideline9"
+                app:layout_constraintTop_toBottomOf="@+id/textView20" />
+
+            <TextView
+                android:id="@+id/textView13"
+                style="@style/subtitleFormat2"
+                android:text="Señas particulares"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/hairColor" />
+
+            <TextView
+                android:id="@+id/features"
+                style="@style/textFormat2"
+                android:background="@drawable/text_view_border"
+                android:text=""
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView13" />
+
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline10"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.25" />
+
+            <TextView
+                android:id="@+id/textView48"
+                style="@style/subtitleFormat2"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ralewaybold"
+                android:text="@string/basicInfo"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvName" />
+
+            <TextView
+                android:id="@+id/textView49"
+                style="@style/subtitleFormat2"
+                android:layout_marginTop="30dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/ralewaybold"
+                android:text="@string/physDesc"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+</layout>

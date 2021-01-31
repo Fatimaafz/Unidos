@@ -2,6 +2,7 @@ package com.example.unidos.access;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -9,21 +10,21 @@ import androidx.lifecycle.ViewModel;
 import com.example.unidos.accountManagement.AccountManagement;
 
 public class MenuViewModel extends ViewModel {
-    MutableLiveData <Boolean> isPressed = new MutableLiveData<>();
-    Context menuContext;
+    public MutableLiveData<String> curp;
+    MutableLiveData <Integer> changeScreen;
 
-    public MenuViewModel(){}
-
-    public void setMenuContext(Context menuContext) {
-        this.menuContext = menuContext;
+    public MenuViewModel(){
+        changeScreen = new MutableLiveData<>();
+        curp = new MutableLiveData<>();
     }
 
-    private Context getMenuContext(){
-        return menuContext;
-    }
+    public void goToSearchReport(){ changeScreen.setValue(1); }
 
     public void goToManageAccount() {
-        Intent intent = new Intent(getMenuContext(), AccountManagement.class);
-        getMenuContext().startActivity(intent);
+        changeScreen.setValue(2);
+    }
+
+    public void setCurp(String curp) {
+        this.curp.setValue(curp);
     }
 }

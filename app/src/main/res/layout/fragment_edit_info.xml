@@ -118,40 +118,24 @@
                     android:inputType="date"
                     android:textColor="@android:color/black"
                     android:text="@={vmEditInfo.birthDate}"
-                    android:onClick="@{() -> vmEditInfo.setIsFieldDateSelected()}"/>
+                    android:onClick="@{() -> vmEditInfo.showCalendar()}"/>
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TilGender"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                style="@style/layoutDropDownMenu"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="25dp"
-                android:fontFamily="@font/ralewayregular"
-                android:textColorHint="@android:color/black"
-                app:boxStrokeColor="@android:color/black"
-                app:boxStrokeWidth="3dp"
-                app:errorIconTint="@color/error_color"
-                app:errorTextColor="@color/error_color"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/TilBirthDate">
 
                 <AutoCompleteTextView
                     android:id="@+id/sexMenu"
+                    style="@style/autoCompleteTextView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:clickable="true"
-                    android:focusable="false"
-                    android:fontFamily="@font/ralewayregular"
                     android:hint="Sexo"
-                    android:inputType="none"
-                    android:cursorVisible="false"
-                    android:textColor="@android:color/black"
-                    android:onClick="@{() -> vmEditInfo.setIsFieldSexSelected()}"
-                    android:text="@{vmEditInfo.sex}"/>
+                    android:text="@={vmEditInfo.sex}"
+                    android:onClick="@{() -> vmEditInfo.displayMenu()}"/>
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -181,7 +165,7 @@
 
             <androidx.appcompat.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView"
-                style="@style/TitleFormat"
+                style="@style/title2"
                 android:text="Datos de acceso"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
@@ -189,7 +173,7 @@
 
             <TextView
                 android:id="@+id/tvCURP"
-                style="@style/subtitleFormat"
+                style="@style/subtitleFormat2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/curp"
@@ -198,7 +182,7 @@
 
             <TextView
                 android:id="@+id/maUserCURP"
-                style="@style/normalText"
+                style="@style/textFormat2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@={vmEditInfo.curp}"
@@ -209,7 +193,7 @@
                 android:id="@+id/btn_ok"
                 style="@style/FillButton"
                 android:enabled="@{vmEditInfo.buttonEnabled}"
-                android:onClick="@{() -> vmEditInfo.saveChanges()}"
+                android:onClick="@{() -> vmEditInfo.checkConnection()}"
                 android:fontFamily="@font/ralewaybold"
                 android:text="Guardar"
                 app:layout_constraintEnd_toEndOf="parent"

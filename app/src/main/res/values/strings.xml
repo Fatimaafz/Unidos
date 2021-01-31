@@ -1,4 +1,8 @@
 <resources>
+    <string name="channel_name">ch</string>
+    <string name="channel_description">des</string>
+    <string name="default_notification_channel_id">ch01</string>
+
     <string name="app_name">Unidos</string>
     <string name="txtBtnLogIn">Iniciar Sesión</string>
     <string name="txtBtnCreateAccount">Crear cuenta</string>
@@ -9,8 +13,47 @@
     <string name="curp">CURP</string>
     <string name="address">Dirección</string>
     <string name="genre">Género</string>
+    <string name="sex">Sexo</string>
     <string name="birthdate">Fecha de nacimiento</string>
     <string name="phone">Número telefónico</string>
+    <string name="nationallity">Nacionalidad</string>
+    <string name="comp">Complexión</string>
+    <string name="skin">Tez</string>
+    <string name="lips">Labios</string>
+    <string name="eyeColor">Color de ojos</string>
+    <string name="eyeShape">Tipo de ojos</string>
+    <string name="hairColor">Color de cabello</string>
+    <string name="hairShape">Tipo de cabello</string>
+    <string name="features">Señas particulares</string>
+    <string name="height">Estatura</string>
+    <string name="face">Tipo de cara</string>
+    <string name="nose">Tipo de nariz</string>
+    <string name="status">Estatus</string>
+    <string name="missing">Desaparecido en </string>
+    <string name="repType">Tipo de reporte</string>
+    <string name="elabDate">Fecha de elaboración</string>
+    <string name="lastSeenPlace">Visto por última vez</string>
+    <string name="repNum">Número de reporte</string>
+    <string name="desc">Datos de la última vez que fue visto</string>
+    <string name="lastSeenDate">Fecha</string>
+    <string name="date">Fecha</string>
+    <string name="place">Ubicación</string>
+    <string name="clothes">Vestimenta</string>
+    <string name="details">Detalles</string>
+    <string name="age">Edad</string>
+    <string name="authData">Datos del autor</string>
+    <string name="rPersonData">Datos de la persona reportada</string>
+    <string name="seenRep">Reporte de avistamiento</string>
+    <string name="seenDate">Fecha de avistamiento</string>
+    <string name="town">Alcaldía</string>
+    <string name="addrDet">Detalles de la dirección</string>
+    <string name="seenDetails">Detalles de los hechos</string>
+    <string name="basicInfo">Información básica</string>
+    <string name="physDesc">Descripción física</string>
+
     <string name="user_curp"></string>
     <string name="logged">true</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -20,6 +20,20 @@ public class PersistentData {
         sp = context.getSharedPreferences("logged", Context.MODE_PRIVATE);
     }
 
+
+    public boolean checkExistence2(){
+        /** Returns the preference value if it exists **/
+        /** If exists, change activity. **/
+        SharedPreferences sharedPreferences = context.getSharedPreferences("logged", Context.MODE_PRIVATE);
+        String pref = String.valueOf(sharedPreferences.getBoolean("logged", false));
+        Log.i("##>> check pref: ", pref);
+        if(sp.getBoolean("logged", false)) {
+            Log.i("##>>", "LOGGG");
+            return true;
+        }else
+            return false;
+    }
+
     public void checkExistence(){
         /** Returns the preference value if it exists **/
         /** If exists, change activity. **/
@@ -45,10 +59,10 @@ public class PersistentData {
         editor1.putBoolean("logged", true).apply();
         SharedPreferences sharedPreferences = context.getSharedPreferences("logged", Context.MODE_PRIVATE);
         String pref = String.valueOf(sharedPreferences.getBoolean("logged", false));
-        Log.i("##>> set v pref: ", pref);
+        Log.i("^^^{ set v pref: ", pref);
 
         /** Change the activity **/
-        goToMainActivity();
+        //goToMainActivity(); --->> ESTABA 19/12/2020
     }
 
     public void removePreferences(){

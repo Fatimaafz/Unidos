@@ -10,363 +10,245 @@
             type="com.example.unidos.NewAccountViewModel"/> <!-- This layout'll be bound to the NewAccountViewModel class -->
     </data>
     <ScrollView
+        style="@style/AppTheme.background"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <LinearLayout
-            style="@style/AppTheme.background"
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-            <LinearLayout
-                android:id="@+id/linearTitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
+            android:layout_height="match_parent">
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivUser"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="10dp"
+                android:src="@drawable/ic_account_circle_24px"
+                app:layout_constraintBottom_toTopOf="@+id/guideline18"
+                app:layout_constraintEnd_toStartOf="@+id/guideline17"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivUser"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="2"
-                    android:layout_marginBottom="20dp"
-                    android:src="@drawable/ic_account_circle_24px" />
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/appCompatAutoCompleteTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="10dp"
+                android:focusable="false"
+                android:fontFamily="@font/ralewaybold"
+                android:text="Datos personales"
+                android:textAlignment="viewStart"
+                android:textColor="@color/red3"
+                android:textSize="20dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline18"
+                app:layout_constraintStart_toStartOf="@+id/guideline17"
+                app:layout_constraintTop_toTopOf="parent" />
 
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginBottom="20dp"
-                    android:text="Datos personales"
-                    android:fontFamily="@font/ralewaybold"
-                    android:textColor="@color/red3"
-                    android:textSize="20dp"
-                    android:focusable="false"/>
-            </LinearLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline17"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.15" />
 
-
-            <LinearLayout
-                android:id="@+id/LinearName"
-                android:layout_width="match_parent"
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline18"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/TilName"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:textColorHint="@color/design_default_color_on_secondary"
-                    android:fontFamily="@font/ralewayregular"
-                    app:boxStrokeColor="@android:color/black"
-                    app:boxStrokeWidth="3dp"
-                    app:errorEnabled="true"
-                    app:errorTextColor="@color/error_color"
-                    app:errorIconTint="@color/error_color">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/tietName"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:cursorVisible="true"
-                        android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/ralewayregular"
-                        android:hint="Nombre"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#000"
-                        android:textCursorDrawable="@null"
-                        android:text="@={vmNewAc.name}"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/TilName2"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="20dp"
-                    android:layout_gravity="center"
-                    android:textColorHint="@color/design_default_color_on_secondary"
-                    android:fontFamily="@font/ralewayregular"
-                    app:boxStrokeColor="@android:color/black"
-                    app:boxStrokeWidth="3dp"
-                    app:errorEnabled="true"
-                    app:errorTextColor="@color/error_color"
-                    app:errorIconTint="@color/error_color">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/tietName2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="20dp"
-                        android:cursorVisible="true"
-                        android:fontFamily="@font/ralewayregular"
-                        android:hint="Segundo nombre"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#000"
-                        android:textCursorDrawable="@null"
-                        android:text="@={vmNewAc.secondName}"/>
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/LinearLastName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp">
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/TilLastName1"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="20dp"
-                    android:layout_marginRight="0dp"
-                    android:layout_weight="1"
-                    android:fontFamily="@font/ralewayregular"
-                    android:textColorHint="@android:color/black"
-                    app:boxStrokeColor="@android:color/black"
-                    app:boxStrokeWidth="3dp"
-                    app:errorEnabled="true"
-                    app:errorTextColor="@color/error_color"
-                    app:errorIconTint="@color/error_color">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/TietLastName1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:cursorVisible="true"
-                        android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/ralewayregular"
-                        android:hint="Apellido Paterno"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#000"
-                        android:textCursorDrawable="@null"
-                        android:text="@={vmNewAc.surname}"/>
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/TilLastName2"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="2dp"
-                    android:layout_marginRight="20dp"
-                    android:fontFamily="@font/ralewayregular"
-                    android:textColorHint="@android:color/black"
-                    app:boxStrokeColor="@android:color/black"
-                    app:boxStrokeWidth="3dp"
-                    app:errorEnabled="true"
-                    app:errorTextColor="@color/error_color"
-                    app:errorIconTint="@color/error_color">
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:id="@+id/TietLastName2"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:cursorVisible="true"
-                        android:layout_marginBottom="20dp"
-                        android:fontFamily="@font/ralewayregular"
-                        android:hint="Apellido Materno"
-                        android:textColor="@android:color/black"
-                        android:textColorHint="#000"
-                        android:textCursorDrawable="@null"
-                        android:text="@={vmNewAc.secondSurname}"/>
-                </com.google.android.material.textfield.TextInputLayout>
-            </LinearLayout>
+                app:layout_constraintGuide_percent="0.07" />
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/TilDate"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_marginTop="10dp"
-                android:fontFamily="@font/ralewayregular"
-                android:hint="Fecha de nacimiento"
-                android:textColorHint="@android:color/black"
-                app:boxStrokeColor="@android:color/black"
-                app:boxStrokeWidth="3dp"
-                app:errorEnabled="true"
-                app:errorTextColor="@color/error_color"
-                app:errorIconTint="@color/error_color">
+                android:id="@+id/TilName"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline20"
+                app:layout_constraintEnd_toStartOf="@+id/guideline19"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline18">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/TietDate"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:cursorVisible="true"
-                    android:fontFamily="@font/ralewayregular"
-                    android:hint="Fecha de nacimiento"
-                    android:textColor="@android:color/black"
-                    android:textColorHint="#000"
-                    android:textCursorDrawable="@null"
-                    android:inputType="date"
-                    android:focusable="false"
-                    android:clickable="true"
-                    android:onClick="@{() -> vmNewAc.displayDatePicker()}"
-                    android:text="@={vmNewAc.date}"
-                    android:drawableEnd="@drawable/ic_calendar_today_24px"
-                    android:drawableRight="@drawable/ic_calendar_today_24px"
-                    />
+                    android:id="@+id/tietName"
+                    style="@style/editText"
+                    android:hint="@string/name"
+                    android:text="@={vmNewAc.name}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:id="@+id/TilGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:boxStrokeColor="@android:color/black"
-                app:boxStrokeWidth="3dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:hint="Sexo"
-                app:errorTextColor="@color/error_color"
-                app:errorIconTint="@color/error_color">
+                android:id="@+id/TilName2"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline20"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/TilName"
+                app:layout_constraintTop_toTopOf="@+id/guideline18">
 
-                <AutoCompleteTextView
-                    android:layout_marginBottom="20dp"
-                    android:id="@+id/outlined_exposed_dropdown"
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/tietName2"
+                    style="@style/editText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textColor="@android:color/black"
-                    android:paddingLeft="15dp"
-                    android:completionThreshold="1"
-                    android:hint="Sexo"
-                    android:textColorHint="@android:color/black"
-                    android:focusable="false"
+                    android:hint="@string/secondName"
+                    android:text="@={vmNewAc.secondName}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline19"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilLastName1"
+                style="@style/firstInputLayout"
+                app:layout_constraintBottom_toTopOf="@+id/guideline21"
+                app:layout_constraintEnd_toStartOf="@+id/guideline19"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline20">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TietLastName1"
+                    style="@style/editText"
+                    android:hint="@string/lastName"
+                    android:text="@={vmNewAc.surname}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilLastName2"
+                style="@style/firstInputLayout"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintBottom_toTopOf="@+id/guideline21"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/guideline19"
+                app:layout_constraintTop_toTopOf="@+id/guideline20">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TietLastName2"
+                    style="@style/editText"
+                    android:hint="@string/lastName2"
+                    android:text="@={vmNewAc.secondSurname}" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilDate"
+                style="@style/firstInputLayout"
+                android:hint="Fecha de nacimiento"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/guideline21">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/TietDate"
+                    style="@style/editText"
                     android:clickable="true"
-                    android:text="@{vmNewAc.sex}"
-                    android:onClick="@{() -> vmNewAc.displayMenu()}"/>
+                    android:cursorVisible="false"
+                    android:drawableEnd="@drawable/ic_calendar_today_24px"
+                    android:drawableRight="@drawable/ic_calendar_today_24px"
+                    android:focusable="false"
+                    android:fontFamily="@font/ralewayregular"
+                    android:hint="Fecha de nacimiento"
+                    android:inputType="date"
+                    android:onClick="@{() -> vmNewAc.displayDatePicker()}"
+                    android:text="@={vmNewAc.date}"
+                    android:textColor="@android:color/black" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/TilGender"
+                style="@style/layoutDropDownMenu"
+                android:layout_width="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilDate">
+
+                <AutoCompleteTextView
+                    android:id="@+id/outlined_exposed_dropdown"
+                    style="@style/autoCompleteTextView"
+                    android:layout_width="match_parent"
+                    android:hint="Sexo"
+                    android:onClick="@{() -> vmNewAc.displayMenu()}"
+                    android:text="@{vmNewAc.sex}" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TilPhone"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                style="@style/firstInputLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center"
-                android:textColorHint="@color/design_default_color_on_secondary"
-                android:fontFamily="@font/ralewayregular"
                 android:textCursorDrawable="@null"
-                app:boxStrokeColor="@android:color/black"
-                app:boxStrokeWidth="3dp"
-                app:errorEnabled="true"
-                app:errorTextColor="@color/error_color"
-                app:errorIconTint="@color/error_color">
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilGender">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/TietPhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="25dp"
                     android:layout_marginBottom="20dp"
                     android:fontFamily="@font/ralewayregular"
                     android:hint="Número telefónico"
+                    android:inputType="phone"
+                    android:text="@={vmNewAc.phone}"
                     android:textColor="@android:color/black"
-                    android:textColorHint="#000"
-                    android:text="@={vmNewAc.phone}"/>
+                    android:textColorHint="#000" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/LinearAccess"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginLeft="20dp"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/ivMail"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginRight="20dp">
+                android:layout_marginRight="10dp"
+                android:layout_marginBottom="15dp"
+                android:src="@drawable/ic_lock"
+                app:layout_constraintEnd_toStartOf="@+id/guideline17"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilPhone" />
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/ivMail"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-                    android:layout_weight="2"
-                    android:layout_marginBottom="20dp"
-                    android:src="@drawable/ic_lock" />
-
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginBottom="20dp"
-                    android:text="Datos de acceso"
-                    android:fontFamily="@font/ralewaybold"
-                    android:textColor="@color/red3"
-                    android:textSize="20dp"
-                    android:focusable="false"/>
-            </LinearLayout>
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/appCompatAutoCompleteTextView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="20dp"
+                android:focusable="false"
+                android:fontFamily="@font/ralewaybold"
+                android:text="Datos de acceso"
+                android:textColor="@color/red3"
+                android:textSize="20dp"
+                app:layout_constraintStart_toEndOf="@+id/ivMail"
+                app:layout_constraintTop_toBottomOf="@+id/TilPhone" />
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/TilCurp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
-                android:layout_gravity="center"
-                android:textColorHint="@color/design_default_color_on_secondary"
-                android:fontFamily="@font/ralewayregular"
-                android:textCursorDrawable="@null"
-                app:boxStrokeColor="@android:color/black"
-                app:boxStrokeWidth="3dp"
-                app:errorEnabled="true"
-                app:errorTextColor="@color/error_color"
-                app:errorIconTint="@color/error_color">
-
-                <!-- While user typing an observer in the NewAccount class will tell what to do to the
-                 NewAccountViewModel -->
-                <!-- The property "text" will be able to listen and receive commands from the architecture
-                 component LiveData which in this case is the variable logCURP while it listen user changes -->
-
-                <!-- the other components will have a similar behavior -->
+                style="@style/firstInputLayout"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/appCompatAutoCompleteTextView2">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/TietCurp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="20dp"
-                    android:fontFamily="@font/ralewayregular"
-                    android:hint="CURP"
-                    android:textColor="@android:color/black"
-                    android:textColorHint="#000"
-                    android:text="@={vmNewAc.curp}"/>
+                    style="@style/editText"
+                    android:hint="@string/curp"
+                    android:text="@={vmNewAc.curp}" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_ok"
-                style="@style/Widget.MaterialComponents.Button"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:layout_marginRight="20dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginBottom="40dp"
-                android:fontFamily="@font/ralewaybold"
-                android:text="Crear cuenta"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:backgroundTint="@color/red3"
-                app:cornerRadius="30dp"
+                style="@style/FillButton"
                 android:enabled="@{vmNewAc.statusBtCreate}"
-                android:onClick="@{() -> vmNewAc.onRegisterClick()}"/>
+                android:fontFamily="@font/ralewaybold"
+                android:onClick="@{() -> vmNewAc.onRegisterClick()}"
+                android:text="Crear cuenta"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/TilCurp" />
 
             <ProgressBar
                 android:id="@+id/progress_circular"
@@ -374,9 +256,25 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                />
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/btn_ok" />
 
-        </LinearLayout>
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline20"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.13" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline21"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.19" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
 </layout>
